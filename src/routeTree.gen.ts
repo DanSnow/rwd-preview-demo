@@ -9,48 +9,55 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IframeRouteImport } from './routes/iframe'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiOrpcSplatRouteImport } from './routes/api/orpc.$'
 
+const IframeRoute = IframeRouteImport.update({
+  id: '/iframe',
+  path: '/iframe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiOrpcSplatRoute = ApiOrpcSplatRouteImport.update({
-  id: '/api/orpc/$',
-  path: '/api/orpc/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/api/orpc/$': typeof ApiOrpcSplatRoute
+  '/iframe': typeof IframeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/api/orpc/$': typeof ApiOrpcSplatRoute
+  '/iframe': typeof IframeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/api/orpc/$': typeof ApiOrpcSplatRoute
+  '/iframe': typeof IframeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/orpc/$'
+  fullPaths: '/' | '/iframe'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/orpc/$'
-  id: '__root__' | '/' | '/api/orpc/$'
+  to: '/' | '/iframe'
+  id: '__root__' | '/' | '/iframe'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ApiOrpcSplatRoute: typeof ApiOrpcSplatRoute
+  IframeRoute: typeof IframeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/iframe': {
+      id: '/iframe'
+      path: '/iframe'
+      fullPath: '/iframe'
+      preLoaderRoute: typeof IframeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -58,19 +65,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/orpc/$': {
-      id: '/api/orpc/$'
-      path: '/api/orpc/$'
-      fullPath: '/api/orpc/$'
-      preLoaderRoute: typeof ApiOrpcSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ApiOrpcSplatRoute: ApiOrpcSplatRoute,
+  IframeRoute: IframeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

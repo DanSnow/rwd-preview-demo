@@ -1,11 +1,8 @@
-import { createRootRouteWithContext, HeadContent, linkOptions, Outlet, Scripts } from '@tanstack/react-router';
+import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from '@tanstack/react-router';
 import type * as React from 'react';
-import { lazy } from 'react';
 
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary';
-import { NavLink } from '~/components/NavLink';
 import { NotFound } from '~/components/NotFound';
-import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from '~/components/ui/navigation-menu';
 import { Toaster } from '~/components/ui/sonner';
 import type { Context } from '~/router-context';
 import { seo } from '~/utils/seo';
@@ -68,8 +65,6 @@ const EmptyComponent = () => null;
 
 EmptyComponent.displayName = 'EmptyComponent';
 
-const Devtools = import.meta.env.DEV ? lazy(() => import('~/components/Devtools')) : EmptyComponent;
-
 function RootComponent() {
   const ctx = Route.useRouteContext();
 
@@ -78,25 +73,9 @@ function RootComponent() {
       <WrapComponent context={ctx}>
         <Outlet />
       </WrapComponent>
-      <Devtools />
     </RootDocument>
   );
 }
-
-const links = linkOptions([
-  {
-    to: '/',
-    label: 'Home',
-  },
-  {
-    to: '/sign-in',
-    label: 'Sign In',
-  },
-  {
-    to: '/sign-up',
-    label: 'Sign Up',
-  },
-]);
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -106,15 +85,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <NavigationMenu>
-          <NavigationMenuList>
-            {links.map((link) => (
-              <NavigationMenuItem key={link.to}>
-                <NavLink to={link.to}>{link.label}</NavLink>
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
         {children}
         <Toaster />
         <Scripts />
