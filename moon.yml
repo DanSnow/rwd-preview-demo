@@ -1,0 +1,54 @@
+id: tanstack-start-template
+tasks:
+  build:
+    command:
+      - pnpm
+      - exec
+      - vite
+      - build
+    toolchain: node
+  dev:
+    command:
+      - vite
+      - dev
+      - --port
+      - '3000'
+    toolchain: node
+    preset: server
+  lint:
+    command:
+      - oxlint
+    toolchain: node
+  drizzle-kit:
+    command: drizzle-kit
+    toolchain: node
+  start:
+    command:
+      - node
+      - .output/server/index.mjs
+    toolchain: node
+    preset: server
+  test:
+    command:
+      - vitest
+    toolchain: node
+  generate-auth:
+    script: |
+      touch src/drizzle/auth-schema.ts # ensure the file exists before generate schema
+      pnpm dlx auth generate --config src/lib/server/auth.ts --output src/drizzle/auth-schema.ts
+      pnpm exec oxlint --fix src/drizzle/auth-schema.ts
+      pnpm exec oxfmt src/drizzle/auth-schema.ts
+  generate-migrate:
+    toolchains: node
+    command: drizzle-kit generate
+    outputs:
+      - src/drizzle/migrations/**/*
+    inputs:
+      - src/drizzle/**/*.ts
+    preset: server
+  migrate:
+    toolchains: node
+    command: drizzle-kit migrate
+    deps:
+      - generate-migrate
+    preset: server

@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=./cache/schemas/toolchains.json
+$schema: ./cache/schemas/toolchains.json
+
+node:
+  version: null
+
+javascript:
+  packageManager: pnpm
+  dedupeOnLockfileChange: false
+  inferTasksFromScripts: false
+  syncProjectWorkspaceDependencies: true
+  syncPackageManagerField: false
+
+pnpm:
+  version: null
