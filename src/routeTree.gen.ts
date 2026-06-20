@@ -9,9 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReduxIframeRouteImport } from './routes/redux-iframe'
+import { Route as ReduxRouteImport } from './routes/redux'
 import { Route as IframeRouteImport } from './routes/iframe'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ReduxIframeRoute = ReduxIframeRouteImport.update({
+  id: '/redux-iframe',
+  path: '/redux-iframe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReduxRoute = ReduxRouteImport.update({
+  id: '/redux',
+  path: '/redux',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IframeRoute = IframeRouteImport.update({
   id: '/iframe',
   path: '/iframe',
@@ -26,31 +38,53 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/iframe': typeof IframeRoute
+  '/redux': typeof ReduxRoute
+  '/redux-iframe': typeof ReduxIframeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/iframe': typeof IframeRoute
+  '/redux': typeof ReduxRoute
+  '/redux-iframe': typeof ReduxIframeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/iframe': typeof IframeRoute
+  '/redux': typeof ReduxRoute
+  '/redux-iframe': typeof ReduxIframeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/iframe'
+  fullPaths: '/' | '/iframe' | '/redux' | '/redux-iframe'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/iframe'
-  id: '__root__' | '/' | '/iframe'
+  to: '/' | '/iframe' | '/redux' | '/redux-iframe'
+  id: '__root__' | '/' | '/iframe' | '/redux' | '/redux-iframe'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   IframeRoute: typeof IframeRoute
+  ReduxRoute: typeof ReduxRoute
+  ReduxIframeRoute: typeof ReduxIframeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/redux-iframe': {
+      id: '/redux-iframe'
+      path: '/redux-iframe'
+      fullPath: '/redux-iframe'
+      preLoaderRoute: typeof ReduxIframeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/redux': {
+      id: '/redux'
+      path: '/redux'
+      fullPath: '/redux'
+      preLoaderRoute: typeof ReduxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/iframe': {
       id: '/iframe'
       path: '/iframe'
@@ -71,6 +105,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   IframeRoute: IframeRoute,
+  ReduxRoute: ReduxRoute,
+  ReduxIframeRoute: ReduxIframeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
