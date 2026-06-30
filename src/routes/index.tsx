@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '~/components/ui/button';
 
 import { createClient } from '../channel';
+import { appUrl } from '../env';
 import type { ContractRouterClient } from '@orpc/contract';
 import type { Protocol } from '../channel/protocol';
 
@@ -49,12 +50,12 @@ function Home() {
       {channelId && (
         <>
           <div>
-            <Button variant="outline" onClick={() => window.open(`/iframe?channelId=${channelId}`, '_blank')}>
+            <Button variant="outline" onClick={() => window.open(appUrl(`/iframe?channelId=${channelId}`), '_blank')}>
               Open in new page
             </Button>
           </div>
           <iframe
-            src={`/iframe?channelId=${channelId}`}
+            src={appUrl(`/iframe?channelId=${channelId}`)}
             className="flex-1 border rounded"
             title="iframe receiver"
           />

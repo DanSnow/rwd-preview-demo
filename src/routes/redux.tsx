@@ -8,6 +8,7 @@ import { RootState, listenerMiddleware } from '~/store';
 import { addMessage, appSlice } from '~/store/app';
 
 import { createReduxClient } from '../channel';
+import { appUrl } from '../env';
 
 export const Route = createFileRoute('/redux')({
   component: RouteComponent,
@@ -77,13 +78,13 @@ function RouteComponent() {
             <div>
               <Button
                 variant="outline"
-                onClick={() => window.open(`/redux-iframe?channelId=${channelId}`, '_blank')}
+                onClick={() => window.open(appUrl(`/redux-iframe?channelId=${channelId}`), '_blank')}
               >
                 Open preview in new page
               </Button>
             </div>
             <iframe
-              src={`/redux-iframe?channelId=${channelId}`}
+              src={appUrl(`/redux-iframe?channelId=${channelId}`)}
               className="flex-1 border rounded"
               title="redux preview"
             />
