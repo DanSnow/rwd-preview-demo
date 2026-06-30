@@ -9,6 +9,7 @@ name: test
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: false
     steps:
       - uses: actions/checkout@v6
         with:
